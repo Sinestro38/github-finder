@@ -1,25 +1,17 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import Spinner from '../layout/Spinner';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Repos from '../repos/Repos';
 
-export class User extends Component {
-    static propTypes = {
-        loading: PropTypes.bool,
-        getUser: PropTypes.func.isRequired,
-        user: PropTypes.object.isRequired,
-        repos: PropTypes.array.isRequired,
-        getUserRepos: PropTypes.func.isRequired,
-    }
+const User = ({loading, repos, user, getUser, getUserRepos, match}) => {
+    useEffect(() => {
+        getUser(match.params.login);
+        getUserRepos(match.params.login);
+        // eslint-disable-next-line
+    }, []);
 
-    componentDidMount() {
-        this.props.getUser(this.props.match.params.login);
-        this.props.getUserRepos(this.props.match.params.login);
-    }
-
-    render() {
-        const { name, 
+        const {  
             avatar_url,
             location, 
             bio, 
@@ -32,12 +24,11 @@ export class User extends Component {
             public_gists, 
             hireable,
             company
-        } = this.props.user;
-        const { loading, repos } = this.props;
+        } = user;
 
         if (loading) return <Spinner />
 
-        return <Fragment>
+        return( <Fragment>
             <Link to="/" className="btn btn-light">Back to search</Link>
             Hireable: {''}{hireable ? <i className="fas fa-check text-success" /> : <i className="fas fa-times-circle text-danger" />}
 
@@ -73,8 +64,15 @@ export class User extends Component {
                 <div className="badge badge-light">Public Repos: {public_repos} </div>
                 <div className="badge badge-dark">Public Gists: {public_gists} </div>
             </div>
-        </Fragment>;
-    }
+        </Fragment>);
+}
+
+User.propTypes = {
+    loading: PropTypes.bool,
+    getUser: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
+    repos: PropTypes.array.isRequired,
+    getUserRepos: PropTypes.func.isRequired,
 }
 
 export default User;
