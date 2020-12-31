@@ -1,4 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Mini-project - Using The Github API to make Github Profile Searcher 
 
 ## Available Scripts
 
